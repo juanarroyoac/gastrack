@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora de Gastos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .container {
+            background: #fff;
+            max-width: 400px;
+            margin: 40px auto;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+            padding: 32px 28px 24px 28px;
+        }
+        h1 {
+            text-align: center;
+            color: #f76b1c;
+            margin-bottom: 24px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+            font-weight: 500;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 18px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            background: #fafafa;
+            transition: border 0.2s;
+        }
+        input:focus {
+            border: 1.5px solid #f76b1c;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            background: linear-gradient(90deg, #f76b1c 0%, #fad961 100%);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: linear-gradient(90deg, #fad961 0%, #f76b1c 100%);
+        }
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .result {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 18px 14px;
+            margin-top: 24px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .result h2 {
+            color: #f76b1c;
+            margin-bottom: 12px;
+        }
+        .result p {
+            margin: 8px 0;
+            color: #444;
+        }
+        .result img {
+            margin-top: 16px;
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        @media (max-width: 500px) {
+            .container {
+                padding: 18px 6px 14px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de gastos de combustible</h1>
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+        <form method="post">
+            <label>Carro:</label>
+            <input type="text" name="carro" required>
+            <label>Kilómetros por día:</label>
+            <input type="number" step="any" name="km_dia" required>
+            <label>Rendimiento (km/L):</label>
+            <input type="number" step="any" name="rendimiento" required>
+            <label>Precio por litro ($):</label>
+            <input type="number" step="any" name="precio" required>
+            <button type="submit">Calcular gastos</button>
+        </form>
+        {% if resultado %}
+            <div class="result">
+                <h2>Resultados para {{ resultado.carro }}</h2>
+                <p>Gasto diario: ${{ resultado.gasto_dia }}</p>
+                <p>Gasto semanal: ${{ resultado.gasto_semana }}</p>
+                <p>Gasto mensual: ${{ resultado.gasto_mes }}</p>
+                <img src="{{ url_for('static', filename='gasto.png') }}" alt="Gráfico de gastos">
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
