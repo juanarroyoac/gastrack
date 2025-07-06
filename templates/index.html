@@ -4,40 +4,72 @@
     <meta charset="UTF-8">
     <title>Calculadora de Gastos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(120deg, #232526 0%, #414345 100%);
+            font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             min-height: 100vh;
+            color: #222;
         }
-        .container {
-            background: #fff;
-            max-width: 400px;
-            margin: 40px auto;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
-            padding: 32px 28px 24px 28px;
-        }
-        h1 {
+        header {
+            background: #232526;
+            color: #fff;
+            padding: 32px 0 16px 0;
             text-align: center;
-            color: #f76b1c;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+        }
+        .site-title {
+            font-size: 2.6em;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+        .site-desc {
+            font-size: 1.1em;
+            color: #fda085;
+            margin-top: 8px;
+        }
+        main {
+            max-width: 900px;
+            margin: 36px auto 0 auto;
+            display: flex;
+            gap: 36px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .form-section, .result-section {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+            padding: 36px 32px 28px 32px;
+            flex: 1 1 340px;
+            min-width: 320px;
+            max-width: 420px;
+        }
+        .form-section {
             margin-bottom: 24px;
+        }
+        h2 {
+            color: #f76b1c;
+            margin-bottom: 18px;
+            font-size: 1.5em;
         }
         label {
             display: block;
-            margin-bottom: 6px;
-            color: #333;
-            font-weight: 500;
+            margin-bottom: 7px;
+            color: #232526;
+            font-weight: 600;
         }
         input[type="text"], input[type="number"] {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 18px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 7px;
             font-size: 1em;
-            background: #fafafa;
+            background: #f7f7f7;
             transition: border 0.2s;
         }
         input:focus {
@@ -49,12 +81,13 @@
             background: linear-gradient(90deg, #f76b1c 0%, #fad961 100%);
             color: #fff;
             border: none;
-            border-radius: 6px;
-            padding: 12px;
-            font-size: 1.1em;
+            border-radius: 7px;
+            padding: 14px;
+            font-size: 1.15em;
             font-weight: bold;
             cursor: pointer;
             transition: background 0.2s;
+            margin-top: 8px;
         }
         button:hover {
             background: linear-gradient(90deg, #fad961 0%, #f76b1c 100%);
@@ -62,63 +95,88 @@
         .error {
             color: #e74c3c;
             text-align: center;
+            margin-bottom: 18px;
+            font-weight: 600;
+        }
+        .result-section {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .result-section h2 {
+            color: #f76b1c;
             margin-bottom: 16px;
         }
-        .result {
-            background: #f9f9f9;
-            border-radius: 8px;
-            padding: 18px 14px;
-            margin-top: 24px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        .result h2 {
-            color: #f76b1c;
-            margin-bottom: 12px;
-        }
-        .result p {
-            margin: 8px 0;
+        .result-section p {
+            margin: 10px 0;
             color: #444;
+            font-size: 1.13em;
         }
-        .result img {
-            margin-top: 16px;
-            max-width: 100%;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        .result-section img {
+            margin-top: 22px;
+            width: 100%;
+            max-width: 700px;
+            height: 380px;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            background: #f7f7f7;
         }
-        @media (max-width: 500px) {
-            .container {
-                padding: 18px 6px 14px 6px;
+        @media (max-width: 1100px) {
+            main {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        @media (max-width: 600px) {
+            main {
+                gap: 12px;
+            }
+            .form-section, .result-section {
+                padding: 18px 8px 14px 8px;
+                min-width: unset;
+                max-width: unset;
+            }
+            .result-section img {
+                height: 220px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Calculadora de gastos de combustible</h1>
-        {% if error %}
-            <div class="error">{{ error }}</div>
-        {% endif %}
-        <form method="post">
-            <label>Carro:</label>
-            <input type="text" name="carro" required>
-            <label>Kilómetros por día:</label>
-            <input type="number" step="any" name="km_dia" required>
-            <label>Rendimiento (km/L):</label>
-            <input type="number" step="any" name="rendimiento" required>
-            <label>Precio por litro ($):</label>
-            <input type="number" step="any" name="precio" required>
-            <button type="submit">Calcular gastos</button>
-        </form>
+    <header>
+        <div class="site-title">GasTrack</div>
+        <div class="site-desc">Calculadora moderna de gastos de combustible</div>
+    </header>
+    <main>
+        <section class="form-section">
+            <h2>Ingresa los datos de tu viaje</h2>
+            {% if error %}
+                <div class="error">{{ error }}</div>
+            {% endif %}
+            <form method="post">
+                <label for="carro">Carro:</label>
+                <select name="carro" id="carro" required>
+                    <option value="" disabled selected>Selecciona tu carro</option>
+                    {% for nombre in car_stats.keys() %}
+                        <option value="{{ nombre }}" {% if resultado and resultado.carro == nombre %}selected{% endif %}>{{ nombre }}</option>
+                    {% endfor %}
+                </select>
+                <label for="km_dia">Kilómetros por día:</label>
+                <input type="number" step="any" name="km_dia" id="km_dia" required value="{{ request.form.km_dia or '' }}">
+                <label for="precio">Precio por litro ($):</label>
+                <input type="number" step="any" name="precio" id="precio" required value="{{ request.form.precio or '' }}">
+                <button type="submit">Calcular gastos</button>
+            </form>
+        </section>
         {% if resultado %}
-            <div class="result">
-                <h2>Resultados para {{ resultado.carro }}</h2>
-                <p>Gasto diario: ${{ resultado.gasto_dia }}</p>
-                <p>Gasto semanal: ${{ resultado.gasto_semana }}</p>
-                <p>Gasto mensual: ${{ resultado.gasto_mes }}</p>
-                <img src="{{ url_for('static', filename='gasto.png') }}" alt="Gráfico de gastos">
-            </div>
+        <section class="result-section">
+            <h2>Resultados para {{ resultado.carro }}</h2>
+            <p><strong>Gasto diario:</strong> ${{ resultado.gasto_dia }}</p>
+            <p><strong>Gasto semanal:</strong> ${{ resultado.gasto_semana }}</p>
+            <p><strong>Gasto mensual:</strong> ${{ resultado.gasto_mes }}</p>
+            <img src="{{ url_for('static', filename='gasto.png') }}" alt="Gráfico de gastos">
+        </section>
         {% endif %}
-    </div>
+    </main>
 </body>
 </html>
